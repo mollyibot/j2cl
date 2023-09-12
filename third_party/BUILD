@@ -69,9 +69,9 @@ alias(
     actual = "@com_sun_tools_javac//jar",
 )
 
-sh_binary(
+alias (
     name = "binaryen",
-    srcs = ["binaryen.sh"],
+    actual = "@com_google_binaryen//:wasm-opt",
 )
 
 alias(

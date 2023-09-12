@@ -13,12 +13,24 @@ def load_j2cl_repo_deps():
         ],
     )
 
-    _github_repo(
+#    _github_repo(
+#        name = "io_bazel_rules_closure",
+#        repo = "bazelbuild/rules_closure",
+#        tag = "19591bbc657061ca2d187f480e7f8d02a95d0329",
+#        sha256 = "811a3f9e313cea204cb1cedbde48436ab85efdf9b6b56c11411cef8ee0c3f91f",
+#    )
+    native.local_repository(
         name = "io_bazel_rules_closure",
-        repo = "bazelbuild/rules_closure",
-        tag = "19591bbc657061ca2d187f480e7f8d02a95d0329",
-        sha256 = "811a3f9e313cea204cb1cedbde48436ab85efdf9b6b56c11411cef8ee0c3f91f",
+        path = "../../rules_closure"
     )
+
+
+    native.local_repository(
+        name = "com_google_binaryen",
+        path = "../../binaryen"
+    )
+
+
 
     # TODO(goktug): Consider moving to setup_j2cl_workspace after licences migration
     # is completed.
