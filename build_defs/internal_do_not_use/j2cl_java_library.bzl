@@ -147,13 +147,11 @@ j2cl_library = rule(
 )
 
 def _impl_java_import(ctx):
-    js_export_info = j2cl_js_provider(ctx)
     return j2cl_common.create_js_lib_struct(
         J2clInfo(
             _private_ = struct(
                 java_info = ctx.attr.jar[JavaInfo],
-                js_info = js_export_info[1],
-                js_export = js_export_info[0],
+                js_info = j2cl_js_provider(ctx),
                 library_info = [],
             ),
             _is_j2cl_provider = 1,

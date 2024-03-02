@@ -102,22 +102,20 @@ def _compile(
     # TODO(b/284654149): Use the same provider for Closure and Wasm once the modular pipeline
     # graduates from being a prototype.
     if backend == "CLOSURE":
-        js_export_and_info = j2cl_js_provider(
+        js_info = j2cl_js_provider(
             ctx,
             js_provider_srcs,
             js_deps,
             js_exports,
             artifact_suffix,
         )
-        js_info = js_export_and_info[1]
-        js_export = js_export_and_info[0]
     else:
         # The reason to have special case here and create a different provider for Wasm is to avoid
         # running the modular transpilation action when building the monolithic j2wasm_application.
         # This provider avoid triggering the transpiler by avoiding using js_provider_sources which
         # are part of the output of the tranpilation. Instead this js provider will use the
         # js that are inputs to the rule.
-        js_export_and_info = j2cl_js_provider(
+        js_info = j2cl_js_provider(
             ctx = ctx,
             srcs = js_srcs,
             # These are exports, because they will need to be referenced by the j2wasm_application
@@ -126,15 +124,12 @@ def _compile(
             exports = js_deps + js_exports,
             artifact_suffix = artifact_suffix,
         )
-        js_export = js_export_and_info[0]
-        js_info = js_export_and_info[1]
     return J2clInfo(
         _private_ = struct(
             java_info = jvm_provider,
             library_info = library_info,
             output_js = output_js,
             js_info = js_info,
-            js_export = js_export,
             kt_exported_friend_jars = kt_exported_friend_jars,
         ),
         _is_j2cl_provider = 1,
@@ -149,7 +144,7 @@ def split_srcs(srcs):
     return (jvm_srcs, js_srcs)
 
 def split_deps(deps):
-    """ Split the provider deps into pJvm and JS groups. """
+    """ Split the provider deps into Jvm and JS groups. """
     jvm_deps = []
     js_deps = []
 
